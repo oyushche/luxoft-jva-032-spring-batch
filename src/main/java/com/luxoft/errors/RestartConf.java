@@ -35,7 +35,7 @@ public class RestartConf
 
             if (stepExecutionContext.containsKey("run"))
             {
-                System.out.println("Green light.");
+                System.out.println("Green light.".toUpperCase());
                 return RepeatStatus.FINISHED;
             }
             else

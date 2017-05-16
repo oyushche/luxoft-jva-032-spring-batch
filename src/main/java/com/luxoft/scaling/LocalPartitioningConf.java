@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class LocalPartitioningConf
 {
     public static final int COUNT = 1_00_000;
-    public static final int CHUNK = 5_000;
+    public static final int CHUNK = 6_000;
     public static Integer[] data;
     public static final AtomicInteger COUNT_OF_WROTE = new AtomicInteger();
 

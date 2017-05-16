@@ -43,7 +43,7 @@ public class SkipConf
                         throw new IllegalStateException();
                     }
 
-                    return it.next();
+                    return s;
                 }
                 return null;
             }
