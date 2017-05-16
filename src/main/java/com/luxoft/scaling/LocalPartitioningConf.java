@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class LocalPartitioningConf
 {
     public static final int COUNT = 1_00_000;
-    public static final int CHUNK = 2_000;
+    public static final int CHUNK = 5_000;
     public static Integer[] data;
     public static final AtomicInteger COUNT_OF_WROTE = new AtomicInteger();
 
@@ -44,7 +45,7 @@ public class LocalPartitioningConf
     {
         generateData();
 
-        Integer[] numbers = Arrays.copyOfRange(data, minValue, maxValue);;
+        Integer[] numbers = Arrays.copyOfRange(data, minValue, maxValue);
 
         return new ListItemReader<>(Arrays.asList(numbers));
     }
@@ -89,7 +90,7 @@ public class LocalPartitioningConf
 
                 context.putInt("minValue", i);
                 context.putInt("maxValue", i + CHUNK);
-//                System.out.println("======>>>> partition created from: " + i + " to: " + (i + CHUNK));
+                System.out.println("======>>>> partition created from: " + i + " to: " + (i + CHUNK));
             }
 
             return map;
@@ -97,9 +98,14 @@ public class LocalPartitioningConf
     }
 
     @Bean
-    public Step step()
+    public Step masterStep()
     {
-        return stepBuilderFactory.get("step A").partitioner(slaveStep().getName(), partitioner()).step(slaveStep()).gridSize(4).taskExecutor(new SimpleAsyncTaskExecutor()).build();
+        return stepBuilderFactory.get("step A")
+                .partitioner(slaveStep().getName(), partitioner())
+                .step(slaveStep())
+                .gridSize(4)
+                .taskExecutor(new SimpleAsyncTaskExecutor())
+                .build();
     }
 
     @Bean
@@ -115,6 +121,6 @@ public class LocalPartitioningConf
     @Bean
     public Job jobPartitioning()
     {
-        return jobBuilderFactory.get("jobPartitioning").start(step()).build();
+        return jobBuilderFactory.get("jobPartitioning").start(masterStep()).build();
     }
 }

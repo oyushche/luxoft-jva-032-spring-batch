@@ -63,7 +63,7 @@ public class RemotePartitioningConf implements ApplicationContextAware
     {
         generateData();
 
-        Integer[] numbers = Arrays.copyOfRange(data, minValue, maxValue);;
+        Integer[] numbers = Arrays.copyOfRange(data, minValue, maxValue);
 
         return new ListItemReader<>(Arrays.asList(numbers));
     }
@@ -160,7 +160,12 @@ public class RemotePartitioningConf implements ApplicationContextAware
     @Bean
     public Step step()
     {
-        return stepBuilderFactory.get("step A").partitioner(slaveStep().getName(), partitioner()).step(slaveStep()).gridSize(4).taskExecutor(new SimpleAsyncTaskExecutor()).build();
+        return stepBuilderFactory.get("step A")
+                .partitioner(slaveStep().getName(), partitioner())
+                .step(slaveStep())
+                .gridSize(4)
+                .taskExecutor(new SimpleAsyncTaskExecutor())
+                .build();
     }
 
     @Bean
