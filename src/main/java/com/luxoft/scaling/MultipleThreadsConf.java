@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
 import java.util.Arrays;
 import java.util.Random;
 
@@ -21,7 +23,7 @@ import java.util.Random;
 public class MultipleThreadsConf
 {
 
-    public static final int COUNT = 1_00_000;
+    public static final int COUNT = 1_0_000;
     public static final int CHUNK = 1_000;
 
     @Autowired
@@ -49,7 +51,7 @@ public class MultipleThreadsConf
         {
             for (String s : list)
             {
-                System.out.println("===>>>> writing: " + s);
+                System.out.println(Thread.currentThread() + " ===>>>> writing: " + s);
             }
         };
     }
@@ -67,7 +69,8 @@ public class MultipleThreadsConf
                 .reader(reader())
                 .processor(processor())
 //                .writer(writer())
-                .taskExecutor(new SimpleAsyncTaskExecutor())
+                .taskExecutor(new SimpleAsyncTaskExecutor()) // new thread for each task
+//                .taskExecutor(new ThreadPoolTaskExecutor()) // prod
                 .build();
     }
 
