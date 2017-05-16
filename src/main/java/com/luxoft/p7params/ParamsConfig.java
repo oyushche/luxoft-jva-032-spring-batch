@@ -2,6 +2,7 @@ package com.luxoft.p7params;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -10,6 +11,7 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 //@Configuration
 //@EnableBatchProcessing
@@ -23,7 +25,7 @@ public class ParamsConfig
     private StepBuilderFactory stepBuilderFactory;
 
     @Bean
-    @StepScope
+    @StepScope // spring will instantiate this step just before execution
     public Tasklet messageTasklet(@Value("#{jobParameters['message']}") String message)
     {
         return (stepContribution, chunkContext) ->

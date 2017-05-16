@@ -37,6 +37,12 @@ public class SkipConf
             {
                 if (it.hasNext())
                 {
+                    String s = it.next();
+                    if ("two".equals(s)) {
+                        System.out.println("=======>>>>>> should skip read for: " + s);
+                        throw new IllegalStateException();
+                    }
+
                     return it.next();
                 }
                 return null;
